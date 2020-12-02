@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 
-fs.readFile('./input1', (err, data) => {
+fs.readFile('./input.txt', (err, data) => {
   if (err) {
     console.log('Whoops', err);
     return;
