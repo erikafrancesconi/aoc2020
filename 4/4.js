@@ -20,13 +20,15 @@ fs.readFile('./input.txt', (err, data) => {
   });;
 
   const requiredFields = {
-    byr: '1933', 
-    iyr: '2019',
-    eyr: '2029',
-    hgt: '187cm',
-    hcl: '#888785',
-    ecl: 'amb',
-    pid: '937877382',
+    byr: /^19[2-9][0-9]|200[0-2]$/, // (Birth Year) - four digits; at least 1920 and at most 2002.
+    iyr: /^201[0-9]|2020$/, // (Issue Year) - four digits; at least 2010 and at most 2020.
+    eyr: /^202[0-9]|2030$/, // (Expiration Year) - four digits; at least 2020 and at most 2030.
+    hgt: /^((1[5-8][0-9]cm)|(19[0-3]cm)|((59)|(6[0-9])|(7[0-6]))in)$/, // (Height) - a number followed by either cm or in:
+      // If cm, the number must be at least 150 and at most 193.
+      // If in, the number must be at least 59 and at most 76.
+    hcl: /^#[0-f]{6}$/, // (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+    ecl: /^amb|blu|brn|gry|grn|hzl|oth$/, // (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+    pid: /^[0-9]{9}$/, // (Passport ID) - a nine-digit number, including leading zeroes.
     // 'cid'
   };
 
@@ -35,7 +37,7 @@ fs.readFile('./input.txt', (err, data) => {
   const validateValues = obj => {
     let err = false;
     for (const field in requiredFields) {
-      if (obj[field] !== requiredFields[field]) {
+      if (!requiredFields[field].test(obj[field])) {
         err = true;
         break;
       }
