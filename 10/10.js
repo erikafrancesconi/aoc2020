@@ -1,7 +1,7 @@
 // https://adventofcode.com/2020
 const fs = require('fs');
 
-fs.readFile('./input.txt', (err, data) => {
+fs.readFile('./input2.txt', (err, data) => {
   if (err) {
     console.log('Whoops', err);
     return;
@@ -12,6 +12,10 @@ fs.readFile('./input.txt', (err, data) => {
   arr.push(0);
   arr.sort((a, b) => a - b);
   arr.push(arr[arr.length - 1] + 3);
+  console.log(arr.length);
+
+  // console.log(arr);
+  // console.log(arr.length);
 
   let ones = 0, threes = 0;
   for (let i = 0; i < arr.length; i++) {
@@ -38,20 +42,55 @@ fs.readFile('./input.txt', (err, data) => {
   });
 
   console.log(arr1);
-  const start = arr[0];
-  const end = arr[arr.length - 1];
 
-  let valid = 0;
-  
-  const traverse = item => {
-    if (item === end) {
-      valid++;
-      return;
+  arr.forEach(val => {
+    arr1[val] = arr1[val][arr1[val].length - 1];
+  });
+  // console.log(arr1);
+
+  const valori = Object.values(arr1).filter(val => val !== undefined);
+  const s = new Set();
+  s.add(arr[0]);
+  valori.forEach(val => {
+    s.add(val);
+  });
+
+  // console.log(s);
+
+  const factorialize = num => {
+    if (num < 0) {
+      return -1;
+    } else if (num == 0)  {
+      return 1;
     }
-    arr1['' + item].forEach(val => {
-      traverse(val);
-    })
+    else {
+      return (num * factorialize(num - 1));
+    }
   }
-  traverse(start); // It never ends
-  console.log('Arrangements', valid);
+
+  const n = arr.length - s.size;
+  console.log(n);
+
+  let sum = 0;
+  for (let k = 0; k <= n; k++) {
+    sum += factorialize(n) / (factorialize(k) * factorialize(n-k));
+  }
+  // console.log(sum);
+
+  // const start = arr[0];
+  // const end = arr[arr.length - 1];
+
+  // let valid = 0;
+  
+  // const traverse = item => {
+  //   if (item === end) {
+  //     valid++;
+  //     return;
+  //   }
+  //   arr1['' + item].forEach(val => {
+  //     traverse(val);
+  //   })
+  // }
+  // traverse(start); // It never ends
+  // console.log('Arrangements', valid);
 });
